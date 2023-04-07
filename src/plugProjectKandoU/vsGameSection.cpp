@@ -1045,13 +1045,6 @@ bool GameMessageVsUseCard::actVs(VsGameSection* section)
 
 /*
  * --INFO--
- * Address:	801C351C
- * Size:	000010
- */
-void FixedSizePelletMgr<PelletOtakara::Object>::setComeAlive(int index) { mMonoObjectMgr.mOpenIds[index] = false; }
-
-/*
- * --INFO--
  * Address:	801C352C
  * Size:	000190
  */
@@ -1539,48 +1532,6 @@ void VsGameSection::clearGetCherryCount()
 	mPlayer1Cherries = 0;
 	mPlayer2Cherries = 0;
 }
-
-/*
- * --INFO--
- * Address:	801C49B8
- * Size:	000008
- */
-bool VsGameSection::challengeDisablePelplant() { return false; }
-
-/*
- * --INFO--
- * Address:	801C49C0
- * Size:	000008
- */
-bool VsGameSection::player2enabled() { return true; }
-
-/*
- * --INFO--
- * Address:	801C49C8
- * Size:	000008
- */
-char* VsGameSection::getCaveFilename() { return mCaveInfoFilename; }
-
-/*
- * --INFO--
- * Address:	801C49D0
- * Size:	000008
- */
-char* VsGameSection::getEditorFilename() { return mEditFilename; }
-
-/*
- * --INFO--
- * Address:	801C49D8
- * Size:	000008
- */
-int VsGameSection::getVsEditNumber() { return mEditNumber; }
-
-// /*
-//  * --INFO--
-//  * Address:	801C49E0
-//  * Size:	000004
-//  */
-// void StateMachine<VsGameSection>::init(VsGameSection*) { }
 
 // /*
 //  * --INFO--

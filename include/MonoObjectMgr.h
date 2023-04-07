@@ -7,20 +7,37 @@
 // TODO: this needs fixing, sigh
 template <typename T>
 struct MonoObjectMgr : public ObjectMgr<T> {
-	MonoObjectMgr();
+	MonoObjectMgr()
+	{
+		_18          = true;
+		mMax         = 0;
+		mActiveCount = 0;
+		mArray       = nullptr;
+		mOpenIds     = nullptr;
+	}
 
 	////////////////// VTABLE
-	virtual ~MonoObjectMgr() { }  // _08 (weak)
-	virtual void* getNext(void*); // _14 (weak)
-	virtual void* getStart();     // _18 (weak)
-	virtual void* getEnd();       // _1C (weak)
-	virtual T* get(void*);        // _20 (weak)
-	virtual T* getAt(int index)   // _24 (weak)
+	virtual ~MonoObjectMgr() { } // _08 (weak)
+	virtual void* getNext(void* id)
+	{
+		int ret = mMax;
+		for (int i = (int)id + 1; i < ret; i++) {
+			if (!mOpenIds[i]) {
+				return (void*)i;
+			}
+		}
+		return (void*)ret;
+		// is the data type really void* ?
+	}                                                       // _14 (weak)
+	virtual void* getStart() { return getNext((void*)-1); } // _18 (weak)
+	virtual void* getEnd() { return (void*)mMax; }          // _1C (weak)
+	virtual T* get(void* id) { return &mArray[(int)id]; }   // _20 (weak)
+	virtual T* getAt(int index)                             // _24 (weak)
 	{
 		return &mArray[index];
 	}
-	virtual int getTo();       // _28 (weak)
-	virtual void doAnimation() // _64 (weak, thunk at _34)
+	virtual int getTo() { return mMax; } // _28 (weak)
+	virtual void doAnimation()           // _64 (weak, thunk at _34)
 	{
 		for (int i = 0; i < mMax; i++) {
 			if (mOpenIds[i] == false) {
@@ -120,7 +137,23 @@ struct MonoObjectMgr : public ObjectMgr<T> {
 		return -1;
 	}
 
-	void alloc(int);
+	void alloc(int count)
+	{
+		mArray       = new T[count];
+		mMax         = count;
+		mActiveCount = 0;
+		mOpenIds     = new u8[count];
+
+		for (int i = 0; i < count; i++) {
+			mOpenIds[i] = true;
+		}
+
+		onAlloc();
+
+		for (int i = 0; i < count; i++) {
+			mArray[i].constructor();
+		}
+	}
 
 	int mActiveCount; // _20
 	int mMax;         // _24

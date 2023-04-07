@@ -50,11 +50,11 @@ struct VsGameSection : public BaseGameSection {
 	virtual void startMainBgm();                                       // _64
 	virtual void section_fadeout();                                    // _68
 	virtual void goNextFloor(ItemHole::Item*);                         // _6C
-	virtual bool challengeDisablePelplant(); /*{ return false; }*/     // _80 (weak)
-	virtual bool player2enabled(); /*{ return true; }*/                // _134 (weak)
-	virtual char* getCaveFilename(); /*{ return mCaveInfoFilename; }*/ // _84 (weak)
-	virtual char* getEditorFilename(); /*{ return mEditFilename; }*/   // _88 (weak)
-	virtual int getVsEditNumber(); /*{ return mEditNumber; }*/         // _8C (weak)
+	virtual bool challengeDisablePelplant() { return false; }          // _80 (weak)
+	virtual bool player2enabled() { return true; }                     // _134 (weak)
+	virtual char* getCaveFilename() { return mCaveInfoFilename; }      // _84 (weak)
+	virtual char* getEditorFilename() { return mEditFilename; }        // _88 (weak)
+	virtual int getVsEditNumber() { return mEditNumber; }              // _8C (weak)
 	virtual void onMovieStart(MovieConfig*, u32, u32);                 // _B0
 	virtual void onMovieDone(MovieConfig*, u32, u32);                  // _B4
 	virtual void gmOrimaDown(int);                                     // _D0
