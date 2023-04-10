@@ -57,45 +57,12 @@ struct StateMachine {
 			GETCURRSTATE(obj)->exec(obj);
 		}
 	}
-	virtual void transit(T* obj, int stateID, StateArg* stateArg) // _14
-	{
-		int stateIndex            = mIdToIndexArray[stateID];
-		FSMState<T>* currentState = GETCURRSTATE(obj);
-		if (currentState) {
-			currentState->cleanup(obj);
-			mCurrentID = currentState->mId;
-		}
-		if (stateIndex >= mLimit) {
-			while (true)
-				;
-		}
-		INITSTATE(obj, mStates[stateIndex], stateArg);
-	}
+	virtual void transit(T* obj, int stateID, StateArg* stateArg); // _14
 
 	// #pragma dont_inline on
-	void create(int limit)
-	{
-		mLimit          = limit;
-		mCount          = 0;
-		mStates         = new FSMState<T>*[mLimit];
-		mIndexToIDArray = new int[mLimit];
-		mIdToIndexArray = new int[mLimit];
-	}
+	void create(int limit);
 
-	void registerState(FSMState<T>* state)
-	{
-		if (mLimit <= mCount) {
-			return;
-		}
-		mStates[mCount] = state;
-		if (!(-1 < state->mId && state->mId < mLimit)) {
-			return;
-		}
-		state->mStateMachine        = this;
-		mIndexToIDArray[mCount]     = state->mId;
-		mIdToIndexArray[state->mId] = mCount;
-		mCount++;
-	}
+	void registerState(FSMState<T>* state);
 	// #pragma dont_inline reset
 
 	int getCurrID(T*);
@@ -108,5 +75,56 @@ struct StateMachine {
 	int* mIdToIndexArray;  // _14, state indices array, indexed by state ID
 	int mCurrentID;        // _18, ID of current/active state
 };
+
+template <typename T>
+void StateMachine<T>::create(int limit) {
+	mLimit          = limit;
+	mCount          = 0;
+	mStates         = new FSMState<T>*[mLimit];
+	mIndexToIDArray = new int[mLimit];
+	mIdToIndexArray = new int[mLimit];
+	
+}
+
+template <typename T>
+void StateMachine<T>::registerState(FSMState<T>* state) {
+	if (mCount >= mLimit) {
+		return;
+	}
+	mStates[mCount] = state;
+	bool inBounds;
+	if (state->mId < 0 || state->mId >= mLimit) {
+		inBounds = false;
+	} else {
+		inBounds = true;
+	}
+
+	if (!inBounds) {
+		return;
+	}
+
+	state->mStateMachine        = this;
+	mIndexToIDArray[mCount]     = state->mId;
+	mIdToIndexArray[state->mId] = mCount;
+	mCount++;
+}
+
+
+template <typename T>
+void StateMachine<T>::transit(T* obj, int stateID, StateArg* stateArg) // _14
+{
+	int stateIndex            = mIdToIndexArray[stateID];
+	FSMState<T>* currentState = GETCURRSTATE(obj);
+	if (currentState) {
+		currentState->cleanup(obj);
+		mCurrentID = currentState->mId;
+	}
+	if (stateIndex >= mLimit) {
+		while (true)
+			;
+	}
+	INITSTATE(obj, mStates[stateIndex], stateArg);
+}
+
 } // namespace Game
 #endif
