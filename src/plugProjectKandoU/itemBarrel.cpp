@@ -237,7 +237,7 @@ void Item::onInit(CreatureInitArg*)
 	mModel->mJ3dModel->calcMaterial();
 	mModel->mJ3dModel->makeDL();
 	mModel->mJ3dModel->lock();
-	mFsm->start(this, Barrel_Normal, nullptr);
+	static_cast<FSM*>(mFsm)->start(this, Barrel_Normal, nullptr);
 	setAlive(true);
 	createBarrel();
 	mAnimSpeed         = 0.0f;
@@ -277,7 +277,7 @@ void Item::updateBoundSphere()
  */
 void Item::doAI()
 {
-	mFsm->exec(this);
+	static_cast<FSM*>(mFsm)->exec(this);
 	updateCollTree();
 	CollPart* part = mCollTree->mPart;
 	part->mRadius  = getWorkRadius();

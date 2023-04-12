@@ -196,10 +196,6 @@ struct FSMItem : public BaseItem {
 
 	// vtable 1
 	// vtable 2
-	virtual void doAI() // _10
-	{
-		static_cast<ItemFSM<ItemClass>*>(mFsm)->exec((ItemClass*)this);
-	}
 	virtual void bounceCallback(Sys::Triangle* tri) // _E0
 	{
 		StateClass* state = mCurrentState;
@@ -227,6 +223,10 @@ struct FSMItem : public BaseItem {
 		if (state) {
 			static_cast<ItemState<ItemClass>*>(state)->onKeyEvent((ItemClass*)this, event);
 		}
+	}
+	virtual void doAI() // _10
+	{
+		static_cast<ItemFSM<ItemClass>*>(mFsm)->exec((ItemClass*)this);
 	}
 
 	inline StateClass* getCurrentState() { return mCurrentState; }

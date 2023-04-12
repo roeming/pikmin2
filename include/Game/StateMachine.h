@@ -57,11 +57,11 @@ struct StateMachine {
 			GETCURRSTATE(obj)->exec(obj);
 		}
 	}
-	virtual void transit(T* obj, int stateID, StateArg* stateArg); // _14
 
+	// yes this is ordered like this. no i dont like it. yes it's necessary afaik for weak generation in itemBarrel
 	// #pragma dont_inline on
 	void create(int limit);
-
+	virtual void transit(T* obj, int stateID, StateArg* stateArg); // _14
 	void registerState(FSMState<T>* state);
 	// #pragma dont_inline reset
 
@@ -77,17 +77,18 @@ struct StateMachine {
 };
 
 template <typename T>
-void StateMachine<T>::create(int limit) {
+void StateMachine<T>::create(int limit)
+{
 	mLimit          = limit;
 	mCount          = 0;
 	mStates         = new FSMState<T>*[mLimit];
 	mIndexToIDArray = new int[mLimit];
 	mIdToIndexArray = new int[mLimit];
-	
 }
 
 template <typename T>
-void StateMachine<T>::registerState(FSMState<T>* state) {
+void StateMachine<T>::registerState(FSMState<T>* state)
+{
 	if (mCount >= mLimit) {
 		return;
 	}
@@ -108,7 +109,6 @@ void StateMachine<T>::registerState(FSMState<T>* state) {
 	mIdToIndexArray[state->mId] = mCount;
 	mCount++;
 }
-
 
 template <typename T>
 void StateMachine<T>::transit(T* obj, int stateID, StateArg* stateArg) // _14
