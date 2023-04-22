@@ -267,8 +267,8 @@ enum GameStateFlags {
 };
 
 struct FSM : public StateMachine<VsGameSection> {
-	virtual void init(VsGameSection*);                    // _08
 	virtual void transit(VsGameSection*, int, StateArg*); // _14
+	virtual void init(VsGameSection*);                    // _08
 
 	void draw(VsGameSection*, Graphics&);
 };
@@ -542,6 +542,9 @@ struct TitleState : public State {
 	Vs2D_TitleInfo* mVsTitleInfo;                  // _40
 };
 /////////////////////////////////////////////////////////////////
+
+
+
 } // namespace VsGame
 
 // here bc it needs VsGame::State defined

@@ -64,7 +64,8 @@ void FSM::draw(VsGameSection* section, Graphics& gfx) { static_cast<State*>(mSta
  * Address:	801C0ECC
  * Size:	000020
  */
-void FSM::transit(VsGameSection* section, int state, StateArg* arg) { StateMachine<VsGameSection>::transit(section, state, arg); }
+void FSM::transit(VsGameSection* section, int state, StateArg* arg) { StateMachine::transit(section, state, arg); }
+
 } // namespace VsGame
 
 int VsGameSection::mRedWinCount;
@@ -1041,6 +1042,11 @@ bool GameMessageVsUseCard::actVs(VsGameSection* section)
 		section->mCardMgr->stopSlot(_04);
 	}
 	return true;
+}
+
+// Only way to get setComeAlive to work
+void FakeFunc() {
+	PelletOtakara::mgr->setComeAlive(0);
 }
 
 /*

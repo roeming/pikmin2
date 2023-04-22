@@ -30,6 +30,7 @@ struct CardMgr;
 struct StageData;
 struct StageList;
 struct State;
+struct FSM;
 } // namespace VsGame
 
 struct VsGameSection : public BaseGameSection {
@@ -99,7 +100,7 @@ struct VsGameSection : public BaseGameSection {
 
 	bool mIsVersusMode;                            // _174
 	VSFifo* mVsFifo;                               // _178
-	StateMachine<Game::VsGameSection>* mFsm;       // _17C
+	VsGame::FSM* mFsm;                             // _17C
 	VsGame::State* mState;                         // _180
 	DvdThreadCommand mDvdThreadCommand;            // _184
 	f32 mGhostIconTimers[2];                       // _1F0

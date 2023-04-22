@@ -51,17 +51,14 @@ struct StateMachine {
 		RESETCURRSTATE(obj);
 		transit(obj, stateID, stateArg);
 	}
-	virtual void exec(T* obj) // _10
-	{
-		if (GETCURRSTATE(obj)) {
-			GETCURRSTATE(obj)->exec(obj);
-		}
-	}
+	virtual void exec(T* obj); // _10
+
+	virtual void transit(T* obj, int stateID, StateArg* stateArg); // _14
 
 	// yes this is ordered like this. no i dont like it. yes it's necessary afaik for weak generation in itemBarrel
 	// #pragma dont_inline on
 	void create(int limit);
-	virtual void transit(T* obj, int stateID, StateArg* stateArg); // _14
+	
 	void registerState(FSMState<T>* state);
 	// #pragma dont_inline reset
 
@@ -87,6 +84,40 @@ void StateMachine<T>::create(int limit)
 }
 
 template <typename T>
+void StateMachine<T>::transit(T* obj, int stateID, StateArg* stateArg) // _14
+{
+	int stateIndex            = mIdToIndexArray[stateID];
+	FSMState<T>* currentState = GETCURRSTATE(obj);
+	if (currentState) {
+		currentState->cleanup(obj);
+		mCurrentID = currentState->mId;
+	}
+	if (stateIndex >= mLimit) {
+		while (true)
+			;
+	}
+	INITSTATE(obj, mStates[stateIndex], stateArg);
+}
+
+
+
+template <typename T>
+void StateMachine<T>::exec(T* obj) {
+	{
+		if (GETCURRSTATE(obj)) {
+			GETCURRSTATE(obj)->exec(obj);
+		}
+	}
+}
+
+
+
+template <typename T>
+int StateMachine<T>::getCurrID(T* obj) {
+	return mCurrentID;
+}
+
+template <typename T>
 void StateMachine<T>::registerState(FSMState<T>* state)
 {
 	if (mCount >= mLimit) {
@@ -108,22 +139,6 @@ void StateMachine<T>::registerState(FSMState<T>* state)
 	mIndexToIDArray[mCount]     = state->mId;
 	mIdToIndexArray[state->mId] = mCount;
 	mCount++;
-}
-
-template <typename T>
-void StateMachine<T>::transit(T* obj, int stateID, StateArg* stateArg) // _14
-{
-	int stateIndex            = mIdToIndexArray[stateID];
-	FSMState<T>* currentState = GETCURRSTATE(obj);
-	if (currentState) {
-		currentState->cleanup(obj);
-		mCurrentID = currentState->mId;
-	}
-	if (stateIndex >= mLimit) {
-		while (true)
-			;
-	}
-	INITSTATE(obj, mStates[stateIndex], stateArg);
 }
 
 } // namespace Game
