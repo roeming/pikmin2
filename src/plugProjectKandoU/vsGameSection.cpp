@@ -1045,8 +1045,10 @@ bool GameMessageVsUseCard::actVs(VsGameSection* section)
 }
 
 // Only way to get setComeAlive to work
-void FakeFunc() {
-	PelletOtakara::mgr->setComeAlive(0);
+Pellet* VsGameSection::reviveCardPellet(Pellet* pellet, PelletInitArg& pelletArg) {
+	PelletOtakara::mgr->setComeAlive(pellet->mSlotIndex);
+	pellet->init(&pelletArg);
+	return pellet;
 }
 
 /*
@@ -1223,9 +1225,7 @@ Pellet* VsGameSection::createCardPellet()
 	for (int i = 0; i < mMaxCherries; i++) {
 		Pellet* pellet = mCherryArray[i];
 		if (!pellet->isAlive() && !pellet->getStateID()) {
-			PelletOtakara::mgr->setComeAlive(pellet->mSlotIndex);
-			pellet->init(&pelletArg);
-			return pellet;
+			return reviveCardPellet(pellet, pelletArg);
 		}
 	}
 	return nullptr;

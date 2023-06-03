@@ -89,6 +89,7 @@ struct VsGameSection : public BaseGameSection {
 	void useCard();
 
 	Pellet* createCardPellet();
+	Pellet* reviveCardPellet(Pellet*, PelletInitArg&);
 
 	inline VsGame::State* getCurrentState() { return mState; }
 	inline void resetCurrentState() { mState = nullptr; }
