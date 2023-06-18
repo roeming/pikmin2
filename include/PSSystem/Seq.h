@@ -92,7 +92,7 @@ struct SeqMgr : JSULink<SeqBase> {
 	void getPlayingSeq(JASTrack*);
 	void getFirstSeq();
 	void getFirstSeqA();
-	void getSeq(u32);
+	SeqBase* getSeq(u32);
 
 	// _00-_10  = JSULink<SeqBase>
 	// _10      = VTABLE
