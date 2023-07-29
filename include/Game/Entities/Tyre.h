@@ -94,7 +94,7 @@ struct Obj : public EnemyBase {
 	bool mIsUnderground;            // _2D1
 	u8 _2D2;                        // _2D2, unknown
 	Vector3f _2D4;                  // _2D4
-	u8 _2E0[0xC];                   // _2E0, unknown
+	Vector3f mWraithPosition;       // _2E0
 	Vector3f _2EC[2];               // _2EC
 	FSM* mFsm;                      // _304
 	f32 mShadowScale;               // _308
